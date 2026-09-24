@@ -32,32 +32,35 @@ Config.Sound = {
     Set = "HUD_AWARDS"
 }
 
-Config.Authorizedjobs = { 'police', 'bcso' } -- Add the job names that you want to be able to use gear (nil or empty table to disable)
+-- Del Perro Sands: every law-enforcement job. Fire and EMS get their own list later if they want reflective vests off the rigs.
+Config.Authorizedjobs = { 'police', 'bcso', 'sasp', 'fib', 'doc', 'dfw', 'rpd', 'rcso', 'uscg', 'natguard' }
 
-Config.RequireUnlocked = false               -- Does the vehicle need to be unlocked to equip gear?
+Config.RequireUnlocked = true                -- The car has to be unlocked (your car, or one whose keys you hold).
 Config.RequireItems = true                   -- Do the items need to be in the trunk to be equipped
-Config.VehicleRestricted = true              -- Restrict gear to certain vehicles
+Config.VehicleRestricted = false             -- Any vehicle for now; once the LEO fleet is final, list it in allowedVehicles and flip this on.
 
 Config.BProofAddedArmor = 50                 -- How much bulletproof vest should add armor
 Config.HVestAddedArmor = 75                  -- How much heavy armor should add armor
 Config.HelmetAddedArmor = 25                 -- How much helmet should add armor (Armor caps at 100)
 
-Config.BProofNumber = 4                      -- Number of the bulletproof vest (set to nil if you want to disable)
-Config.BProofTexture = 0                     -- Number of the bulletproof vest texture
-Config.BProofItem = 'armour'                 -- Name of the bulletproof vest item / false
+-- Clothing per gender. Freemode drawables differ between mp_m_freemode_01 and
+-- mp_f_freemode_01; one number for both was the upstream bug. The bulletproof
+-- vest and helmet are the pairs wasabi_police_v2 already uses for its tactical
+-- outfit on this server (verified in game there); heavy and reflective are the
+-- upstream male numbers with female values marked TUNE until seen in game.
+Config.Gear = {
+    bproof = { item = 'armour', male = { 15, 2 }, female = { 17, 2 } },   -- component 9
+    heavy  = { item = false,    male = { 20, 0 }, female = { 20, 0 } },   -- component 9, female TUNE
+    refvest= { item = false,    male = { 21, 0 }, female = { 21, 0 } },   -- component 9, female TUNE
+    helmet = { item = false,    male = { 150, 0 }, female = { 149, 0 } }, -- prop 0
+}
+-- Set a gear entry to false to disable it, e.g. Config.Gear.heavy = false
 
-Config.HeavyVestNumber = 20                  -- Number of the heavy vest (set to nil if you want to disable)
-Config.HeavyVestTexture = 0                  -- Number of the heavy vest texture
-Config.HeavyVestItem = false                 -- Name of the heavy vest item / false
-
-Config.RefVestNumber = 21                    -- Number of the reflective vest (set to nil if you want to disable)
-Config.RefVestTexture = 0                    -- Number of the reflective vest texture
-Config.RefVestItem = false                   -- Name of the reflective vest item / false
-
-Config.HelmetNumber = 59                     -- number of the helmet (set to nil if you want to disable)
-Config.HelmetTexture = 0                     -- number of the helmet texture
-Config.HelmetItem = false                    -- Name of the helmet item / false
-
+-- Kept for the upstream code paths; read through Config.Gear above.
+Config.BProofItem = Config.Gear.bproof and Config.Gear.bproof.item
+Config.HeavyVestItem = Config.Gear.heavy and Config.Gear.heavy.item
+Config.RefVestItem = Config.Gear.refvest and Config.Gear.refvest.item
+Config.HelmetItem = Config.Gear.helmet and Config.Gear.helmet.item
 
 Config.Translation = {
     take_armor = "Grab bulletproof vest",

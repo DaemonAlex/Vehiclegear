@@ -1,4 +1,4 @@
-lib.versionCheck('Lapertaja/Vehiclegear')
+-- upstream: lib.versionCheck('Lapertaja/Vehiclegear') - dropped, this is the DPS fork.
 
 local trunk
 
