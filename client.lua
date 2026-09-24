@@ -1,5 +1,15 @@
 local originalVest = nil
 local originalHelmet = nil
+
+---Drawable/texture pair for a gear piece on MY ped's gender; nil when disabled.
+---@param key 'bproof'|'heavy'|'refvest'|'helmet'
+---@return number? drawable, number? texture
+local function gearNumbers(key)
+    local g = Config.Gear and Config.Gear[key]
+    if not g then return nil end
+    local pair = (GetEntityModel(cache.ped) == `mp_f_freemode_01`) and g.female or g.male
+    return pair and pair[1], pair and pair[2] or 0
+end
 local hasTakenHelmet = false
 local BProofTaken = false
 local HVestTaken = false
@@ -134,7 +144,7 @@ exports.ox_target:addGlobalVehicle({
         distance = 1.0,
         groups = Config.Authorizedjobs,
         canInteract = function(entity)
-            local allowed = isAllowedVehicle(entity) and Config.BProofNumber ~= nil and not BProofTaken and
+            local allowed = isAllowedVehicle(entity) and gearNumbers('bproof') ~= nil and not BProofTaken and
                 not HVestTaken and not RefVestTaken
             if Config.RequireUnlocked then
                 allowed = allowed and GetVehicleDoorLockStatus(entity) == 1
@@ -166,7 +176,7 @@ exports.ox_target:addGlobalVehicle({
                 if playProgressBar(Config.Translation.putting_armor, data.entity) then
                     saveCurrentVest()
                     SetPedArmour(cache.ped, math.min(GetPedArmour(cache.ped) + Config.BProofAddedArmor, 100))
-                    SetPedComponentVariation(cache.ped, 9, Config.BProofNumber, Config.BProofTexture, 1)
+                    do local d, t = gearNumbers('bproof') SetPedComponentVariation(cache.ped, 9, d, t, 1) end
 
                     if Config.RequireItems then
                         TriggerServerEvent('vehiclegear:removeItem', Config.BProofItem, plate)
@@ -188,7 +198,7 @@ exports.ox_target:addGlobalVehicle({
         distance = 1.0,
         groups = Config.Authorizedjobs,
         canInteract = function(entity)
-            local allowed = isAllowedVehicle(entity) and Config.HeavyVestNumber ~= nil and not BProofTaken and
+            local allowed = isAllowedVehicle(entity) and gearNumbers('heavy') ~= nil and not BProofTaken and
                 not HVestTaken and not RefVestTaken
             if Config.RequireUnlocked then
                 allowed = allowed and GetVehicleDoorLockStatus(entity) == 1
@@ -220,7 +230,7 @@ exports.ox_target:addGlobalVehicle({
                 if playProgressBar(Config.Translation.putting_heavy, data.entity) then
                     saveCurrentVest()
                     SetPedArmour(cache.ped, math.min(GetPedArmour(cache.ped) + Config.HVestAddedArmor, 100))
-                    SetPedComponentVariation(cache.ped, 9, Config.HeavyVestNumber, Config.HeavyVestTexture, 1)
+                    do local d, t = gearNumbers('heavy') SetPedComponentVariation(cache.ped, 9, d, t, 1) end
 
                     if Config.RequireItems then
                         TriggerServerEvent('vehiclegear:removeItem', Config.HeavyVestItem, plate)
@@ -242,7 +252,7 @@ exports.ox_target:addGlobalVehicle({
         distance = 1.0,
         groups = Config.Authorizedjobs,
         canInteract = function(entity)
-            local allowed = isAllowedVehicle(entity) and Config.RefVestNumber ~= nil and not BProofTaken and
+            local allowed = isAllowedVehicle(entity) and gearNumbers('refvest') ~= nil and not BProofTaken and
                 not HVestTaken and not RefVestTaken
             if Config.RequireUnlocked then
                 allowed = allowed and GetVehicleDoorLockStatus(entity) == 1
@@ -273,7 +283,7 @@ exports.ox_target:addGlobalVehicle({
 
                 if playProgressBar(Config.Translation.putting_vest, data.entity) then
                     saveCurrentVest()
-                    SetPedComponentVariation(cache.ped, 9, Config.RefVestNumber, Config.RefVestTexture, 1)
+                    do local d, t = gearNumbers('refvest') SetPedComponentVariation(cache.ped, 9, d, t, 1) end
 
                     if Config.RequireItems then
                         TriggerServerEvent('vehiclegear:removeItem', Config.RefVestItem, plate)
@@ -295,7 +305,7 @@ exports.ox_target:addGlobalVehicle({
         distance = 1.0,
         groups = Config.Authorizedjobs,
         canInteract = function(entity)
-            local allowed = isAllowedVehicle(entity) and Config.HelmetNumber ~= nil and not hasTakenHelmet
+            local allowed = isAllowedVehicle(entity) and gearNumbers('helmet') ~= nil and not hasTakenHelmet
             if Config.RequireUnlocked then
                 allowed = allowed and GetVehicleDoorLockStatus(entity) == 1
             end
@@ -326,7 +336,7 @@ exports.ox_target:addGlobalVehicle({
                 if playProgressBar(Config.Translation.putting_helmet, data.entity) then
                     saveCurrentHelmet()
                     ClearPedProp(cache.ped, 0)
-                    SetPedPropIndex(cache.ped, 0, Config.HelmetNumber, Config.HelmetTexture, true)
+                    do local d, t = gearNumbers('helmet') SetPedPropIndex(cache.ped, 0, d, t, true) end
                     SetPedArmour(cache.ped, math.min(GetPedArmour(cache.ped) + Config.HelmetAddedArmor, 100))
 
                     if Config.RequireItems then

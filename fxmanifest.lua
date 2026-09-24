@@ -2,9 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 lua54 'true'
 
-author 'Lapertaja'
-description 'Take equipment out of a police car trunk'
-version '1.1.4'
+author 'Lapertaja, DPS fork'
+description 'Take equipment out of a police car trunk (Del Perro Sands: per-gender clothing, ten LEO jobs)'
+version '1.1.5-dps1'
 
 client_script 'client.lua'
 
@@ -17,5 +17,6 @@ shared_scripts {
 
 dependencies {
     'ox_lib',
-    'ox_target'
+    'ox_target',
+    'ox_inventory'
 }
